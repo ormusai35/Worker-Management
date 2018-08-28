@@ -40,9 +40,10 @@ class Register extends React.Component {
 			})
 		})
 		.then(response => response.json())
-		.then(data => {
-			if (data) {
-				this.props.onRouteChange('new employee');
+		.then(employers_list => {
+			if (employers_list) {
+				this.props.updateEmployers(employers_list);
+				this.props.onRouteChange('home');
 			}
 		})
 	}

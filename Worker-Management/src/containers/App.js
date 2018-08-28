@@ -35,7 +35,6 @@ const initState = {
 		entries: 0,
 		joined: ''
 	},
-	robots : [],
 	employers: [],
 	searchfield: '' 
 }
@@ -48,21 +47,23 @@ class App extends Component {
 	}
 
 	getManagerId = () => {
-		console.log(this.state.user.id);
 		return this.state.user.id;
 
 	}
 
-	loadUser = (data) => {
+	loadUser = (user_to_load) => {
 		this.setState({user: {
-			id: data.user.id,
-			name: data.user.name,
-			email: data.user.email,
-			password: data.user.password,
-			entries: data.user.entries,
-			joined: data.user.joined
+			id: user_to_load.id,
+			name: user_to_load.name,
+			email: user_to_load.email,
+			password: user_to_load.password,
+			entries: user_to_load.entries,
+			joined: user_to_load.joined
 		}}); 
-		this.setState({employers: data.employers});
+	}
+
+	updateEmployers = (employers_list) => {
+		this.setState({employers: employers_list});
 	}
 
 	onChangeInput = (event) => {
@@ -71,19 +72,6 @@ class App extends Component {
 
 	onSearchChange = (event) => {
 		this.setState({ searchfield: event.target.value });
-		// this.setState({ searchfield: event.target.value });
-		// fetch('http://localhost:3000/image', {
-		//             method: 'post',
-		//             headers: {'Content-Type': 'application/json'},
-		//             body: JSON.stringify({
-		//               name: this.state.searchfield.toLowerCase()
-		//             })
-		//         })
-		// .then(response => response.json())
-		// .then(robots => {
-		// 	console.log(robots);
-		// 	this.setState({robots: robots})
-		// })
 	}
 
 	onRouteChange = (route) => {
@@ -104,8 +92,6 @@ class App extends Component {
 			return employer.name.toLowerCase().startsWith(this.state.searchfield.toLowerCase())
 		})
 
-
-
   	const {route,isSignIn} = this.state;
     return (
       <div className="App">
@@ -115,7 +101,7 @@ class App extends Component {
         <Navigation isSignIn={isSignIn} onRouteChange={this.onRouteChange}/>
         {
     		route === 'signIn' 
-    		? <SignIn loadUser={this.loadUser} onRouteChange={this.onRouteChange}/>
+    		? <SignIn updateEmployers={ this.updateEmployers } loadUser={this.loadUser} onRouteChange={this.onRouteChange}/>
     		: route === 'home'
     		?
     			 <div>	  
@@ -130,7 +116,7 @@ class App extends Component {
 				  </div>
     		: route === 'new employee'
     		? <div>
-    			<InsertEmployee getManagerId={ this.getManagerId } onRouteChange={this.onRouteChange}/>
+    			<InsertEmployee updateEmployers={ this.updateEmployers } getManagerId={ this.getManagerId } onRouteChange={this.onRouteChange}/>
     		  </div>  
     		: <div>
     			<Register loadUser={this.loadUser} onRouteChange={this.onRouteChange} />

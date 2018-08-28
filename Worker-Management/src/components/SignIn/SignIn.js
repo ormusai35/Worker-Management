@@ -29,8 +29,10 @@ class SignIn extends React.Component {
 		})
 		.then(response => response.json())
       	.then(data => {
+      		console.log(data);
 	        if(data.user){
-	          this.props.loadUser(data);
+	          this.props.loadUser(data.user);
+	          this.props.updateEmployers(data.employers);
 	          this.props.onRouteChange('home');
 	        } else alert("user not exist");
       });

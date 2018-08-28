@@ -7,6 +7,7 @@ const bcrypt = require('bcrypt-nodejs');
 
 const signin = require('./controllers/signIn');
 const register = require('./controllers/register');
+const employee = require('./controllers/employee');
 
 const db = knex({
   client: 'pg',
@@ -29,6 +30,7 @@ app.get('/', (req,res) => {
 
 app.post('/signin', (req,res) => { signin.handleSignIn(req,res,db,bcrypt) })
 app.post('/register', (req,res) => { register.handleRegister(req,res,db,bcrypt) })
+app.post('/employee', (req,res) => { employee.handleEmployee(req,res,db) })
 
 app.get('/profile/:id', (req,res) => {
 	const {id} = req.params;
@@ -49,23 +51,6 @@ app.put('/searcher', (req,res) => {
 			res.json(employers)
 		})
 		.catch(err => res.status(400).json('error getting data'))
-})
-
-app.post('/employee', (req,res) => {	
-	db.insert(
-			{
-				name: req.body.name,
-				picture: req.body.image,
-				manager_id: req.body.manager_id,
-				email: req.body.email,
-				role: req.body.role
-			})
-	.into('employers')
-	.returning('name')
-	.then(employee => {
-		res.json(employee[0])
-	})
-	.catch(err => res.status(400).json('failed'))
 })
 
 app.listen(3000, () => {
