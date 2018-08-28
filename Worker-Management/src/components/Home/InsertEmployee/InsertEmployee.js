@@ -4,40 +4,46 @@ class Register extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			name: "",
 			email: "",
-			pssword: "",
-			name: ""
+			image: "",
+			role: ""			
 		}
-	}
-
-	onEmailChange = (event) => {
-		this.setState({email: event.target.value});
-	}
-
-	onPasswordChange = (event) => {
-		this.setState({password: event.target.value});
 	}
 
 	onNameChange = (event) => {
 		this.setState({name: event.target.value});
 	}		
 
-	onSubmitRegister = () => {
-		fetch('http://localhost:3000/register', {
+	onEmailChange = (event) => {
+		this.setState({email: event.target.value});
+	}
+
+	onImageChange = (event) => {
+		this.setState({image: event.target.value});
+	}
+
+	onRoleChange = (event) => {
+		this.setState({role: event.target.value});
+	}
+
+	onSubmitInsert = () => {
+		fetch('http://localhost:3000/employee', {
 			method: 'post',
 			headers: {'Content-Type': 'application/json'},
 			body: JSON.stringify({
+				name: this.state.name,
 				email: this.state.email,
-				password: this.state.password,
-				name: this.state.name
+				image: this.state.image,
+				role: this.state.role,
+				manager_id: this.props.getManagerId()
 			})
 		})
 		.then(response => response.json())
 		.then(data => {
-			if (data.user) {
-				this.props.loadUser(data);
-				this.props.onRouteChange('home');
-			} else alert('incorrect form submission');
+			if (data) {
+				this.props.onRouteChange('new employee');
+			}
 		})
 	}
 
@@ -50,7 +56,7 @@ class Register extends React.Component {
 				    <fieldset id="New_Employee" className="ba b--transparent ph0 mh0">
 				      <legend className="f2 fw6 ph0 mh0">New Employee</legend>
 				      <div className="mt3">
-				        <label className="db fw6 lh-copy f6" htmlFor="email-address">name</label>
+				        <label className="db fw6 lh-copy f6" htmlFor="email-address">Name</label>
 				        <input className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100" 
 				         type="text" 
 				         name="name"  
@@ -68,27 +74,27 @@ class Register extends React.Component {
 				         />
 				      </div>
   				      <div className="mt3">
-				        <label className="db fw6 lh-copy f6" htmlFor="email-address">image</label>
+				        <label className="db fw6 lh-copy f6" htmlFor="email-address">Image</label>
 				        <input className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100" 
 				         type="text" 
 				         name="image"  
 				         id="image" 
-				         onChange={this.onNameChange}
+				         onChange={this.onImageChange}
 				         />
 				      </div>
 				      <div className="mt3">
-				        <label className="db fw6 lh-copy f6" htmlFor="email-address">role</label>
+				        <label className="db fw6 lh-copy f6" htmlFor="email-address">Role</label>
 				        <input className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100" 
 				         type="text" 
 				         name="role"  
 				         id="role" 
-				         onChange={this.onNameChange}
+				         onChange={this.onRoleChange}
 				         />
 				      </div>
 				    </fieldset>
 				    <div className="">
 				      <input className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib" 
-				       onClick={this.onSubmitRegister} 
+				       onClick={this.onSubmitInsert} 
 				       type="submit" 
 				       value="insert" />
 				    </div>

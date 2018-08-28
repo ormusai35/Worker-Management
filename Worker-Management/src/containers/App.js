@@ -47,6 +47,12 @@ class App extends Component {
 		this.state = initState;
 	}
 
+	getManagerId = () => {
+		console.log(this.state.user.id);
+		return this.state.user.id;
+
+	}
+
 	loadUser = (data) => {
 		this.setState({user: {
 			id: data.user.id,
@@ -113,7 +119,7 @@ class App extends Component {
     		: route === 'home'
     		?
     			 <div>	  
-					<div className="deepshadow"> Employee Pool</div>
+					<div className="deepshadow"> Workers Management </div>
 					<SearchBox searchChange={this.onSearchChange} />
 					<Scroll>
 						<CardList 
@@ -124,7 +130,7 @@ class App extends Component {
 				  </div>
     		: route === 'new employee'
     		? <div>
-    			<InsertEmployee />
+    			<InsertEmployee getManagerId={ this.getManagerId } onRouteChange={this.onRouteChange}/>
     		  </div>  
     		: <div>
     			<Register loadUser={this.loadUser} onRouteChange={this.onRouteChange} />

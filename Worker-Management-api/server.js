@@ -51,6 +51,23 @@ app.put('/searcher', (req,res) => {
 		.catch(err => res.status(400).json('error getting data'))
 })
 
+app.post('/employee', (req,res) => {	
+	db.insert(
+			{
+				name: req.body.name,
+				picture: req.body.image,
+				manager_id: req.body.manager_id,
+				email: req.body.email,
+				role: req.body.role
+			})
+	.into('employers')
+	.returning('name')
+	.then(employee => {
+		res.json(employee[0])
+	})
+	.catch(err => res.status(400).json('failed'))
+})
+
 app.listen(3000, () => {
 	console.log('app is running on port 3000');
 })
